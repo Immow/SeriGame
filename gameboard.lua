@@ -97,9 +97,9 @@ function GameBoard:keypressed(key,scancode,isrepeat)
 	end
 	select:keypressed(key,scancode,isrepeat)
 
-	if key == "space" then
-		print(tprint(GameBoard.tiles))
-	end
+	-- if key == "space" then
+	-- 	print(tprint(GameBoard.tiles))
+	-- end
 end
 
 function GameBoard:update(dt)

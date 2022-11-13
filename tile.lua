@@ -21,7 +21,7 @@ function Tile.new(settings)
 	instance.width  = settings.width
 	instance.height = settings.height
 	instance.position = settings.position
-	instance.quad = getQuad()
+	instance.quad = settings.quad or getQuad()
 
 	return instance
 end
