@@ -22,6 +22,7 @@ function Tile.new(settings)
 	instance.height = settings.height
 	instance.position = settings.position
 	instance.quad = settings.quad or getQuad()
+	instance.active = true
 
 	return instance
 end
@@ -31,7 +32,10 @@ function Tile:update(dt)
 end
 
 function Tile:draw()
-	love.graphics.draw(SPRITE, self.quad, self.x, self.y)
+	if self.active then
+		love.graphics.draw(SPRITE, self.quad, self.x, self.y)
+		love.graphics.print(self.position.x.."\n"..self.position.y, self.x, self.y)
+	end
 end
 
 return Tile

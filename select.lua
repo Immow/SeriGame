@@ -1,28 +1,33 @@
 local Select = {}
 
-local selectedTile = {}
-selectedTile.active = false
-local higlightedTile = {x = 1, y = 1}
+local highlightedTile = {}
+highlightedTile.position = {x = 1, y = 1}
+highlightedTile.x = (highlightedTile.position.x - 1) * TILE_WIDTH + BOARD_OFFSET_X
+highlightedTile.y = (highlightedTile.position.y - 1) * TILE_HEIGHT + BOARD_OFFSET_Y
+highlightedTile.width = TILE_WIDTH
+highlightedTile.height = TILE_HEIGHT
 
-Select.x = (higlightedTile.x - 1) * TILE_WIDTH + BOARD_OFFSET_X
-Select.y = (higlightedTile.y - 1) * TILE_HEIGHT + BOARD_OFFSET_Y
-Select.xHighlight = nil
-Select.yHighlight = nil
-Select.width = TILE_WIDTH
-Select.height = TILE_HEIGHT
+local selectedTile = {}
+selectedTile.position = {x = nil, y = nil}
+selectedTile.x = nil
+selectedTile.y = nil
+selectedTile.width = TILE_WIDTH
+selectedTile.height = TILE_HEIGHT
+selectedTile.active = false
 
 local function moveSelect(direction)
-	if direction == "right" and higlightedTile.x < BOARD_TILE_X_AMOUNT then
-		higlightedTile.x = higlightedTile.x + 1
-	elseif direction == "left" and higlightedTile.x > 1 then
-		higlightedTile.x = higlightedTile.x - 1
-	elseif direction == "up" and higlightedTile.y > 1 then
-		higlightedTile.y = higlightedTile.y - 1
-	elseif direction == "down" and higlightedTile.y < BOARD_TILE_Y_AMOUNT then
-		higlightedTile.y = higlightedTile.y + 1
+	if direction == "right" and highlightedTile.position.x < BOARD_TILE_X_AMOUNT then
+		highlightedTile.position.x = highlightedTile.position.x + 1
+	elseif direction == "left" and highlightedTile.position.x > 1 then
+		highlightedTile.position.x = highlightedTile.position.x - 1
+	elseif direction == "up" and highlightedTile.position.y > 1 then
+		highlightedTile.position.y = highlightedTile.position.y - 1
+	elseif direction == "down" and highlightedTile.position.y < BOARD_TILE_Y_AMOUNT then
+		highlightedTile.position.y = highlightedTile.position.y + 1
 	end
-	Select.x = (higlightedTile.x - 1) * TILE_WIDTH + BOARD_OFFSET_X
-	Select.y = (higlightedTile.y - 1) * TILE_HEIGHT + BOARD_OFFSET_Y
+
+	highlightedTile.x = (highlightedTile.position.x - 1) * TILE_WIDTH + BOARD_OFFSET_X
+	highlightedTile.y = (highlightedTile.position.y - 1) * TILE_HEIGHT + BOARD_OFFSET_Y
 end
 
 function Select.unselectTile()
@@ -45,38 +50,39 @@ function Select:keypressed(key,scancode,isrepeat)
 	end
 
 	if key == "return" then
-		if not selectedTile.active then
-			selectedTile.x, selectedTile.y = higlightedTile.x, higlightedTile.y
-			print(selectedTile.x, selectedTile.y)
-			Select.xHighlight = (selectedTile.x - 1) * TILE_WIDTH + BOARD_OFFSET_X
-			Select.yHighlight = (selectedTile.y - 1) * TILE_HEIGHT + BOARD_OFFSET_Y
+		if not selectedTile.active and (selectedTile.x == nil and selectedTile.y == nil) then
+			selectedTile.position.x, selectedTile.position.y = highlightedTile.position.x, highlightedTile.position.y
+			selectedTile.x = (selectedTile.position.x - 1) * TILE_WIDTH + BOARD_OFFSET_X
+			selectedTile.y = (selectedTile.position.y - 1) * TILE_HEIGHT + BOARD_OFFSET_Y
 			selectedTile.active = true
 		else
 			selectedTile.active = false
+			selectedTile.x = nil
+			selectedTile.y = nil
 		end
 	end
 end
 
 function Select.getSelectedTilePosition()
-	return selectedTile
+	return selectedTile.position
 end
 
 function Select.getHighligtedTilePosition()
-	return higlightedTile
+	return highlightedTile.position
 end
 
 function Select:drawSelection()
 	love.graphics.setColor(1,1,1,1)
-	love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+	love.graphics.rectangle("line", highlightedTile.x, highlightedTile.y, highlightedTile.width, highlightedTile.height)
 	love.graphics.setColor(1,1,1,0.5)
-	love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+	love.graphics.rectangle("fill", highlightedTile.x, highlightedTile.y, highlightedTile.width, highlightedTile.height)
 	love.graphics.setColor(1,1,1,1)
 end
 
 function Select:drawSelectTileHiglight()
 	if selectedTile.active then
 		love.graphics.setLineWidth(2)
-		love.graphics.rectangle("line", self.xHighlight, self.yHighlight, self.width, self.height)
+		love.graphics.rectangle("line", selectedTile.x, selectedTile.y, selectedTile.width, selectedTile.height)
 		love.graphics.setColor(1,1,1,1)
 	end
 	love.graphics.setLineWidth(1)
@@ -89,7 +95,6 @@ end
 function Select:draw()
 	self:drawSelection()
 	self:drawSelectTileHiglight()
-	love.graphics.print(tostring(selectedTile.active))
 end
 
 return Select

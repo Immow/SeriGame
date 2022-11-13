@@ -35,13 +35,8 @@ local function swapTiles(a, b)
 	local tileA = copyTable(a)
 	local tileB = copyTable(b)
 
-	b.x, b.y, b.position = tileA.x, tileA.y, tileA.position
-	a.x, a.y, a.position = tileB.x, tileB.y, tileB.position
-	-- print("a: ".."x:"..a.position.x, "y: "..a.position.y)
-	-- print("b: ".."x:".. b.position.x, "y: "..b.position.y)
-
-	GameBoard.tiles[a.position.y][a.position.x] = b
-	GameBoard.tiles[b.position.y][b.position.x] = a
+	GameBoard.tiles[tileA.position.y][tileA.position.x].quad = tileB.quad
+	GameBoard.tiles[tileB.position.y][tileB.position.x].quad = tileA.quad
 end
 
 local function drawBoard()
@@ -60,35 +55,9 @@ function GameBoard:load()
 	generateTiles(BOARD_TILE_X_AMOUNT, BOARD_TILE_Y_AMOUNT)
 end
 
--- FUNCTION TO PRINT TABLES
-function tprint (tbl, indent)
-	if not indent then indent = 0 end
-	local toprint = string.rep(" ", indent) .. "{\r\n"
-	indent = indent + 2 
-	for k, v in pairs(tbl) do
-		toprint = toprint .. string.rep(" ", indent)
-		if (type(k) == "number") then
-			toprint = toprint .. "[" .. k .. "] = "
-		elseif (type(k) == "string") then
-			toprint = toprint  .. k ..  "= "   
-		end
-		if (type(v) == "number") then
-			toprint = toprint .. v .. ",\r\n"
-		elseif (type(v) == "string") then
-			toprint = toprint .. "\"" .. v .. "\",\r\n"
-		elseif (type(v) == "table") then
-			toprint = toprint .. tprint(v, indent + 2) .. ",\r\n"
-		else
-			toprint = toprint .. "\"" .. tostring(v) .. "\",\r\n"
-		end
-	end
-	toprint = toprint .. string.rep(" ", indent-2) .. "}"
-	return toprint
-end
-
 function GameBoard:keypressed(key,scancode,isrepeat)
 	if key == "return" then
-		if select.selectionStatus() then -- and select.getHighligtedTilePosition().x ~= select.getSelectedTilePosition().x and select.getHighligtedTilePosition().y ~= select.getSelectedTilePosition().y
+		if select.selectionStatus() then
 			swapTiles(
 				self.tiles[select.getSelectedTilePosition().y][select.getSelectedTilePosition().x],
 				self.tiles[select.getHighligtedTilePosition().y][select.getHighligtedTilePosition().x]
@@ -96,10 +65,6 @@ function GameBoard:keypressed(key,scancode,isrepeat)
 		end
 	end
 	select:keypressed(key,scancode,isrepeat)
-
-	-- if key == "space" then
-	-- 	print(tprint(GameBoard.tiles))
-	-- end
 end
 
 function GameBoard:update(dt)
