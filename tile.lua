@@ -37,15 +37,13 @@ function Tile:update(dt)
 end
 
 function Tile:draw()
-	if self.active then
-		love.graphics.draw(sprite, self.quad, self.x, self.y)
-		-- love.graphics.print(self.position.x.."\n"..self.position.y, self.x, self.y)
-		love.graphics.print(self.quadPosition.x.."\n"..self.quadPosition.y, self.x, self.y)
-		if self.state == "marked" then
-			love.graphics.setColor(0,1,0,1)
-			love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
-			love.graphics.setColor(1,1,1,1)
-		end
+	love.graphics.draw(sprite, self.quad, self.x, self.y)
+	-- love.graphics.print(self.position.x.."\n"..self.position.y, self.x, self.y)
+	love.graphics.print(self.quadPosition.x.."\n"..self.quadPosition.y, self.x, self.y)
+	if self.state == "marked" then
+		love.graphics.setColor(0,1,0,1)
+		love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+		love.graphics.setColor(1,1,1,1)
 	end
 end
 

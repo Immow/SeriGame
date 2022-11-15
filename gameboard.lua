@@ -54,12 +54,10 @@ end
 
 local function checkLine()
 	for y = 1, BOARD_TILE_Y_AMOUNT do
-		local x = 1
-		-- local y = 1
 		local count = 1
 		local prevTileX
 		local prevTileY
-		while x <= BOARD_TILE_X_AMOUNT do
+		for x = 1, BOARD_TILE_X_AMOUNT do
 			local currentTileX = GameBoard.tiles[y][x].quadPosition.x
 			local currentTileY =  GameBoard.tiles[y][x].quadPosition.y
 			
@@ -77,11 +75,9 @@ local function checkLine()
 			
 			prevTileX = currentTileX
 			prevTileY = currentTileY
-			x = x + 1
 		end
-		y = y + 1
 	end
-	print(tprint(GameBoard.tiles))
+	-- print(tprint(GameBoard.tiles))
 end
 
 -- local function checkLine()
