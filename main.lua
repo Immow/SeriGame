@@ -1,6 +1,7 @@
 love.graphics.setDefaultFilter('nearest', 'nearest')
 
-require("settings")
+require("constants")
+require("tprint")
 State = require("state")
 
 function love.load()

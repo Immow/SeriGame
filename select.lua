@@ -50,15 +50,13 @@ function Select:keypressed(key,scancode,isrepeat)
 	end
 
 	if key == "return" then
-		if not selectedTile.active and (selectedTile.x == nil and selectedTile.y == nil) then
+		if not selectedTile.active then
 			selectedTile.position.x, selectedTile.position.y = highlightedTile.position.x, highlightedTile.position.y
 			selectedTile.x = (selectedTile.position.x - 1) * TILE_WIDTH + BOARD_OFFSET_X
 			selectedTile.y = (selectedTile.position.y - 1) * TILE_HEIGHT + BOARD_OFFSET_Y
 			selectedTile.active = true
 		else
 			selectedTile.active = false
-			selectedTile.x = nil
-			selectedTile.y = nil
 		end
 	end
 end
