@@ -52,6 +52,15 @@ local function drawSelect()
 	select:draw()
 end
 
+local function compareQuadPosition(count, currentTileX, currentTileY, prevTileX, prevTileY)
+	if currentTileX == prevTileX and currentTileY == prevTileY then
+		count = count + 1
+	else
+		count = 1
+	end
+	return count
+end
+
 local function checkLine_horizontal()
 	for y = 1, BOARD_TILE_Y_AMOUNT do
 		local count = 1
@@ -61,11 +70,7 @@ local function checkLine_horizontal()
 			local currentTileX = GameBoard.tiles[y][x].quadPosition.x
 			local currentTileY =  GameBoard.tiles[y][x].quadPosition.y
 			
-			if currentTileX == prevTileX and currentTileY == prevTileY then
-				count = count + 1
-			else
-				count = 1
-			end
+			count = compareQuadPosition(count, currentTileX, currentTileY, prevTileX, prevTileY)
 			
 			if count >= 3 then
 				for i = 1, count, 1 do
@@ -88,11 +93,7 @@ local function checkLine_vertical()
 			local currentTileX = GameBoard.tiles[y][x].quadPosition.x
 			local currentTileY =  GameBoard.tiles[y][x].quadPosition.y
 			
-			if currentTileX == prevTileX and currentTileY == prevTileY then
-				count = count + 1
-			else
-				count = 1
-			end
+			count = compareQuadPosition(count, currentTileX, currentTileY, prevTileX, prevTileY)
 			
 			if count >= 3 then
 				for i = 1, count, 1 do
