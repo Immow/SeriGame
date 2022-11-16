@@ -52,7 +52,7 @@ local function drawSelect()
 	select:draw()
 end
 
-local function checkLine()
+local function checkLine_horizontal()
 	for y = 1, BOARD_TILE_Y_AMOUNT do
 		local count = 1
 		local prevTileX
@@ -77,38 +77,34 @@ local function checkLine()
 			prevTileY = currentTileY
 		end
 	end
-	-- print(tprint(GameBoard.tiles))
 end
 
--- local function checkLine()
--- 	local x = 1
--- 	local y = 1
--- 	local count = 1
-
--- 	while x <= BOARD_TILE_X_AMOUNT do
--- 		local tile1 = GameBoard.tiles[y][x].quadPosition.x and GameBoard.tiles[y][x].quadPosition.y
--- 		local tile2 = GameBoard.tiles[y][x + 1].quadPosition.x and GameBoard.tiles[y][x + 1].quadPosition.y
-		
--- 		if tile1 == tile2 then
--- 			count = count + 1
--- 		else
--- 			if count >= 3 then
--- 				for i = 1, count, 1 do
--- 					GameBoard.tiles[y][x - (i - 1)].state = "marked"
--- 				end
--- 			end
--- 			count = 1
--- 		end
--- 		x = x + 1
--- 	end
-
--- 	-- while y < BOARD_TILE_Y_AMOUNT do
--- 	-- 	-- print("y: "..y)
--- 	-- 	y = y + 1
--- 	-- end
-
--- 	print(tprint(GameBoard.tiles))
--- end
+local function checkLine_vertical()
+	for x = 1, BOARD_TILE_X_AMOUNT do
+		local count = 1
+		local prevTileX
+		local prevTileY
+		for y = 1, BOARD_TILE_Y_AMOUNT do
+			local currentTileX = GameBoard.tiles[y][x].quadPosition.x
+			local currentTileY =  GameBoard.tiles[y][x].quadPosition.y
+			
+			if currentTileX == prevTileX and currentTileY == prevTileY then
+				count = count + 1
+			else
+				count = 1
+			end
+			
+			if count >= 3 then
+				for i = 1, count, 1 do
+					GameBoard.tiles[y - (i - 1)][x].state = "marked"
+				end
+			end
+			
+			prevTileX = currentTileX
+			prevTileY = currentTileY
+		end
+	end
+end
 
 function GameBoard:load()
 	generateTiles(BOARD_TILE_X_AMOUNT, BOARD_TILE_Y_AMOUNT)
@@ -125,8 +121,8 @@ function GameBoard:keypressed(key,scancode,isrepeat)
 	end
 	select:keypressed(key,scancode,isrepeat)
 	if key == "space" then
-		checkLine()
-		-- print(GameBoard.tiles[1][1].quadPosition.x, GameBoard.tiles[1][2].quadPosition.x)
+		checkLine_horizontal()
+		checkLine_vertical()
 	end
 end
 
